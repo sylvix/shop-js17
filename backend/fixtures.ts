@@ -18,36 +18,45 @@ const run = async () => {
     console.log('Collections were not present, skipping drop...');
   }
 
-  const [cpuCategory, ssdCategory] = await Category.create({
-    title: 'CPUs',
-    description: 'Central Processor Units'
-  }, {
-    title: 'SSDs',
-    description: 'Solid State Drives'
-  });
+  const [cpuCategory, ssdCategory] = await Category.create(
+    {
+      title: 'CPUs',
+      description: 'Central Processor Units',
+    },
+    {
+      title: 'SSDs',
+      description: 'Solid State Drives',
+    },
+  );
 
-  await Product.create({
-    title: 'Intel Core i7 12700K',
-    price: 350,
-    category: cpuCategory._id,
-    image: 'fixtures/cpu.jpg'
-  }, {
-    title: 'Samsung 990 Pro 1TB',
-    price: 170,
-    category: ssdCategory._id,
-    image: 'fixtures/ssd.jpg'
-  });
+  await Product.create(
+    {
+      title: 'Intel Core i7 12700K',
+      price: 350,
+      category: cpuCategory._id,
+      image: 'fixtures/cpu.jpg',
+    },
+    {
+      title: 'Samsung 990 Pro 1TB',
+      price: 170,
+      category: ssdCategory._id,
+      image: 'fixtures/ssd.jpg',
+    },
+  );
 
-  await User.create({
-    username: 'user',
-    password: '1@345qWert',
-    token: crypto.randomUUID(),
-  }, {
-    username: 'admin',
-    password: '1@345qWert',
-    token: crypto.randomUUID(),
-    role: 'admin'
-  });
+  await User.create(
+    {
+      username: 'user',
+      password: '1@345qWert',
+      token: crypto.randomUUID(),
+    },
+    {
+      username: 'admin',
+      password: '1@345qWert',
+      token: crypto.randomUUID(),
+      role: 'admin',
+    },
+  );
 
   await db.close();
 };

@@ -1,7 +1,7 @@
-import { Schema, model, Model, HydratedDocument } from "mongoose";
-import { IUser } from "../types";
-import bcrypt from "bcrypt";
-import { randomUUID } from "crypto";
+import { Schema, model, Model, HydratedDocument } from 'mongoose';
+import { IUser } from '../types';
+import bcrypt from 'bcrypt';
+import { randomUUID } from 'crypto';
 
 const SALT_WORK_FACTOR = 10;
 
@@ -10,7 +10,7 @@ interface IUserMethods {
   generateToken(): void;
 }
 
-type UserModel = Model<IUser, {}, IUserMethods>;
+type UserModel = Model<IUser, Record<string, unknown>, IUserMethods>;
 
 const UserSchema = new Schema<IUser, UserModel, IUserMethods>({
   username: {
@@ -18,18 +18,16 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>({
     required: true,
     unique: true,
     validate: {
-      validator: async function (
-        this: HydratedDocument<IUser>,
-        username: string
-      ): Promise<boolean> {
-        if (!this.isModified("username")) return true;
+      validator: async function (this: HydratedDocument<IUser>, username: string): Promise<boolean> {
+        if (!this.isModified('username')) return true;
 
         const user: HydratedDocument<IUser> | null = await User.findOne({
           username,
         });
-        return !Boolean(user);
+
+        return !user;
       },
-      message: "This user is already registered",
+      message: 'This user is already registered',
     },
   },
   password: {
@@ -43,15 +41,15 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>({
   role: {
     type: String,
     required: true,
-    default: "user",
-    enum: ["user", "admin"],
+    default: 'user',
+    enum: ['user', 'admin'],
   },
   displayName: String,
   googleId: String,
 });
 
-UserSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
+UserSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
     return next();
   }
 
@@ -61,7 +59,7 @@ UserSchema.pre("save", async function (next) {
   next();
 });
 
-UserSchema.set("toJSON", {
+UserSchema.set('toJSON', {
   transform: (_, ret) => {
     delete ret.password;
     return ret;
@@ -76,6 +74,6 @@ UserSchema.methods.generateToken = function () {
   this.token = randomUUID();
 };
 
-const User = model<IUser, UserModel>("User", UserSchema);
+const User = model<IUser, UserModel>('User', UserSchema);
 
 export default User;

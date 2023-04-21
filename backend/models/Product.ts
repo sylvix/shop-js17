@@ -9,19 +9,19 @@ const ProductSchema = new Schema({
     required: true,
     validate: {
       validator: async (value: Types.ObjectId) => Category.findById(value),
-      message: 'Category does not exist'
-    }
+      message: 'Category does not exist',
+    },
   },
   title: {
     type: String,
-    required: true
+    required: true,
   },
   price: {
     type: Number,
-    required: true
+    required: true,
   },
   description: String,
-  image: String
+  image: String,
 });
 
 const Product = mongoose.model('Product', ProductSchema);
