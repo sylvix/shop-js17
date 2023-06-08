@@ -29,5 +29,5 @@ When('I click {string} button', (buttonName: string) => {
 
 Then('I see {string} in user menu.', async (text: string) => {
   const uppercaseText = 'Hello, ' + text;
-  I.see(uppercaseText.toUpperCase());
+  I.waitForText(uppercaseText.toUpperCase());
 });
